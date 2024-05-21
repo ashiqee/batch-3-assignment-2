@@ -44,10 +44,13 @@ const productsSchema = new Schema<Products>({
     type: [String],
     required: true,
   },
-  variant: variantSchema,
-  invetory: inventorySchema,
+  variants: {
+    type: [variantSchema],
+  },
+
+  inventory: {
+    type: inventorySchema,
+  },
 });
 
-
-
-export const ProductsModel = model<Products>("Products", productsSchema)
+export const ProductsModel = model<Products>("Products", productsSchema);
