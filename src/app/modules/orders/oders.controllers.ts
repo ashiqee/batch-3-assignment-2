@@ -1,10 +1,21 @@
 
 import { Request, Response } from "express";
 import { OrdersServices } from './orders.service';
+import { ProductsServices } from "../products/products.service";
 
 const createNewOrder = async (req: Request, res: Response) => {
     try {
         const order = req.body; 
+        const {productId ,quantity}=order;
+        
+        const productInventoryUpdate = await ProductsServices.orderInventoryUpdateInDB(productId as string, quantity as number)
+
+
+if(!productInventoryUpdate){
+    return res.status(500).json({
+        success: false,
+        message: "Insufficient quantity available in inventory",
+           })}
 
         const result = await OrdersServices.createNewOrderInDB(order);
         res.status(200).json({
