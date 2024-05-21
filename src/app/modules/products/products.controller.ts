@@ -21,7 +21,7 @@ const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-//get all products
+//get all products with search
 
 const getAllProducts = async (req: Request, res: Response) => {
   try {
