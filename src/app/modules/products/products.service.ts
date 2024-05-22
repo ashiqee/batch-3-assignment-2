@@ -1,31 +1,27 @@
-import { z } from "zod";
-import { productValidationSchema } from "./product.validation";
-import { Products } from "./products.interface";
-import { ProductsModel } from "./products.model";
+import { z } from 'zod';
+import { productValidationSchema } from './product.validation';
+import { Products } from './products.interface';
+import { ProductsModel } from './products.model';
 
 const createProductsIntoDB = async (products: Products) => {
   const result = await ProductsModel.create(products);
   return result;
 };
 
-const getAllProductsFromDB = async (searchTerm: string ) => {
-  
+const getAllProductsFromDB = async (searchTerm: string) => {
+  const query = searchTerm
+    ? {
+        $or: [
+          { name: { $regex: searchTerm, $options: 'i' } },
+          { description: { $regex: searchTerm, $options: 'i' } },
+          { category: { $regex: searchTerm, $options: 'i' } },
+          { tags: { $regex: searchTerm, $options: 'i' } },
+        ],
+      }
+    : {};
 
-  const query = searchTerm ? {
-    $or: [
-      { name: { $regex: searchTerm , $options: "i" } },
-      { description: { $regex: searchTerm , $options: "i" } },
-      { category: { $regex: searchTerm , $options: "i" } },
-      { tags: { $regex: searchTerm , $options: "i" } },
-    
-    ]
-  } :{};
-
-
-    const result = await ProductsModel.find(query);
-    return result;
-
-      
+  const result = await ProductsModel.find(query);
+  return result;
 };
 
 const getSignleProductFromDB = async (productId: string) => {
@@ -40,8 +36,8 @@ const updateAProductIntoDB = async (updateProductData: {
   data: Partial<Products>;
 }) => {
   try {
-       //validation update product
-const parsedProduct = productValidationSchema.parse(updateProductData.data)
+    //validation update product
+    const parsedProduct = productValidationSchema.parse(updateProductData.data);
 
     const result = await ProductsModel.findByIdAndUpdate(
       { _id: updateProductData._id },
@@ -51,58 +47,52 @@ const parsedProduct = productValidationSchema.parse(updateProductData.data)
         runValidators: true,
       }
     );
-   
+
     return result;
-  } catch (err:any) {
-      if(err instanceof z.ZodError){
+  } catch (err: unknown) {
+    if (err instanceof z.ZodError) {
       throw err;
-    }else{
+    } else {
       throw new Error(err.message);
     }
-    
   }
 };
 
-
-// delete a Product 
+// delete a Product
 
 const deleteAProductFromDB = async (productId: string) => {
-
-  try{
+  try {
     const result = await ProductsModel.findByIdAndDelete(productId);
-    return result
-  }catch(err){
-    console.log(err);
-    
+    return result;
+  } catch (err: unknown) {
+    throw new Error(err);
   }
-}
-
+};
 
 // product inventory update
 
-const orderInventoryUpdateInDB = async(productId:string,orderQuantity:number)=>{
+const orderInventoryUpdateInDB = async (
+  productId: string,
+  orderQuantity: number
+) => {
+  const product = await ProductsModel.findById(productId);
 
-const product = await ProductsModel.findById(productId);
+  if (!product) {
+    throw new Error('Product not found');
+  }
 
-if(!product){
-  throw new Error("Product not found")
-}
+  // check quantity
+  if (product.inventory.quantity < orderQuantity) {
+    return false;
+  }
 
-// check quantity 
-if(product.inventory.quantity < orderQuantity){
-  return false
-}
+  // update stock
+  product.inventory.quantity -= orderQuantity;
+  product.inventory.inStock = product.inventory.quantity > 0;
 
-// update stock 
-product.inventory.quantity -= orderQuantity;
-product.inventory.inStock = product.inventory.quantity > 0;
-
-await product.save();
-return product;
-
-}
-
-
+  await product.save();
+  return product;
+};
 
 export const ProductsServices = {
   createProductsIntoDB,
@@ -110,6 +100,5 @@ export const ProductsServices = {
   getSignleProductFromDB,
   updateAProductIntoDB,
   deleteAProductFromDB,
-  orderInventoryUpdateInDB
-  
+  orderInventoryUpdateInDB,
 };

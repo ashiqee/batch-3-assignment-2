@@ -1,9 +1,9 @@
 # batch-3-assignment-2
+
 ### **Submission : (Please check my submissions:)**
 
-- GitHub Repository URL (Server): https://github.com/ashiqee/batch-3-assignment-2 
+- GitHub Repository URL (Server): https://github.com/ashiqee/batch-3-assignment-2
 - Live Server Link: https://batch-3-assignment-2.onrender.com/
-
 
 **Objective:** Develop a Express application with TypeScript as the programming language, integrating MongoDB with Mongoose for effective data management. Ensure data integrity through validation using Zod.
 
@@ -12,6 +12,7 @@
 This is a Product management API built with Express, Mongoose, and TypeScript.
 
 ## Table of Contents
+
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Configuration](#configuration)
@@ -22,6 +23,7 @@ This is a Product management API built with Express, Mongoose, and TypeScript.
 ## Prerequisites
 
 Ensure you have the following installed on your local machine:
+
 - Node.js (version 14 or higher)
 - npm (version 6 or higher) or yarn
 - MongoDB (running locally or a connection URI to a remote instance)
@@ -34,14 +36,20 @@ Ensure you have the following installed on your local machine:
    git clone https://github.com/ashiqee/batch-3-assignment-2.git
    cd batch-3-assignment-2
 
+   ```
 
 2. Install dependencies:
-### usi npm: 
+
+### usi npm:
+
 ```tsc
 npm i
 ```
+
 ## Configuration
-1. Create a  `.env` file in the root directory of the project and add the following enviroment variables:
+
+1. Create a `.env` file in the root directory of the project and add the following enviroment variables:
+
 ```tsc
 PORT=5000
 
@@ -51,6 +59,7 @@ DATABASE_URL= mongodb+srv://ecom-dbuser:Dfj5EATotOon0MF1@cluster0.ucf500e.mongod
 ### Runnig the Application
 
 1. To compile and run the TypeScript application in development mode with hot-reloading, use:
+
 ```bash
 npm run dev
 ```
@@ -60,7 +69,9 @@ npm run dev
 ```bash
 npm run build
 ```
+
 3. To start the build application:
+
 ```bash
 npm run start:prod
 ```
@@ -68,21 +79,94 @@ npm run start:prod
 ## API Endpoints
 
 - Products
-    - `GET` `/api/products` - Get all products
-    - `GET` `/api/products/?searchTerm=iphone` - Search any product match with name, tag and description.
-    - `GET` `/api/products/:productId` - Get Sigle product by productId.
-    - `POST` `/api/products` - Create a new product
-    - `PUT` `/api/products/:productId` - Update a product by productId
-    - `DELETE` `/api/products/:productId` - Delete a product by productId.
+
+  - `GET` `/api/products` - Get all products
+  - `GET` `/api/products/?searchTerm=iphone` - Search any product match with name, tag and description.
+  - `GET` `/api/products/:productId` - Get Sigle product by productId.
+  - `POST` `/api/products` - Create a new product
+  - `PUT` `/api/products/:productId` - Update a product by productId
+  - `DELETE` `/api/products/:productId` - Delete a product by productId.
 
 - Orders
-    - `GET` `/api/orders` - Get all orders
-    - `GET` `/api/orders/?email=level2@programming-hero.com` - Get orders by email
-    - `POST` `/api/orders` - Create a new order
+  - `GET` `/api/orders` - Get all orders
+  - `GET` `/api/orders/?email=level2@programming-hero.com` - Get orders by email
+  - `POST` `/api/orders` - Create a new order
+
+## Demo DATA
+1. create a order
+
+```bash
+{
+    "email": "ashiq2@gmail.com",
+    "productId": "664c3528ac5dbcd6d2563f71",
+    "price": 360.66,
+    "quantity": 1
+}
+````
+2. create a new product
+```bash
+{
+    "name": "Wireless Mouse",
+    "description": "Ergonomic wireless mouse with adjustable DPI settings.",
+    "price": 100.99,
+    "category": "Electronics",
+    "tags": [
+        "computer",
+        "peripherals",
+        "wireless",
+        "ergonomic"
+    ],
+    "variants": [
+        {
+            "type": "color",
+            "value": "Black"
+        },
+        {
+            "type": "color",
+            "value": "White"
+        }
+    ],
+    "inventory": {
+        "quantity": 150,
+        "inStock": true
+    }
+}
+````
+3. Update product Data
+    - example price is 100.99 to 500.99 now.
+
+```bash
+{
+    "name": "Wireless Mouse",
+    "description": "Ergonomic wireless mouse with adjustable DPI settings.",
+    "price": 500.99,
+    "category": "Electronics",
+    "tags": [
+        "computer",
+        "peripherals",
+        "wireless",
+        "ergonomic"
+    ],
+    "variants": [
+        {
+            "type": "color",
+            "value": "Black"
+        },
+        {
+            "type": "color",
+            "value": "White"
+        }
+    ],
+    "inventory": {
+        "quantity": 150,
+        "inStock": true
+    }
+}
+
+```
 
 
 ## Project Structure
-
 
 ```go
 product-managment-api/
@@ -96,7 +180,7 @@ product-managment-api/
 │   │   │   │   ├── products.service.ts
 │   │   │   │   ├── products.interface.ts
 │   │   │   │   └── products.validation.ts
-│   │   │   │  
+│   │   │   │
 │   │   │   ├── orders/
 │   │   │   │   ├── orders.controllers.ts
 │   │   │   │   ├── orders.model.ts
@@ -118,12 +202,54 @@ product-managment-api/
 ```
 
 ### Additional Information
-  - Environment Variables: Store all environment-specific configurations in the .env file.
- - Linting: The project uses ESLint for code quality and consistency.
+
+- Environment Variables: Store all environment-specific configurations in the .env file.
+- Linting: The project uses ESLint for code quality and consistency.
 - Formatting: The project uses Prettier for code formatting.
 
 ### **Validation with Zod**
 
 
+-    Validation error
+```bash
+    {
+    "success": false,
+    "message": "Validation error",
+    "errors": [
+        {
+            "path": "category",
+            "errorMessage": "Product category is required"
+        }
+    ]
+}
+```
+### sample error data
+```bash
+{
+    "name": "Wireless Mouse",
+    "description": "Ergonomic wireless mouse with adjustable DPI settings.",
+    "price": 100.99,
+    "category": "",
+    "tags": [
+        "computer",
+        "peripherals",
+        "wireless",
+        "ergonomic"
+    ],
+    "variants": [
+        {
+            "type": "color",
+            "value": "Black"
+        },
+        {
+            "type": "color",
+            "value": "White"
+        }
+    ],
+    "inventory": {
+        "quantity": 150,
+        "inStock": true
+    }
+}
 
-
+```

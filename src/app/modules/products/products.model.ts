@@ -1,5 +1,5 @@
-import { model, Schema } from "mongoose";
-import { Inventory, Products, Variant } from "./products.interface";
+import { model, Schema } from 'mongoose';
+import { Inventory, Products, Variant } from './products.interface';
 
 const variantSchema = new Schema<Variant>({
   type: {
@@ -53,4 +53,4 @@ const productsSchema = new Schema<Products>({
   },
 });
 
-export const ProductsModel = model<Products>("Products", productsSchema);
+export const ProductsModel = model<Products>('Products', productsSchema);

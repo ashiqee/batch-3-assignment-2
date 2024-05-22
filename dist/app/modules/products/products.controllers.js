@@ -35,7 +35,7 @@ var __awaiter =
 Object.defineProperty(exports, '__esModule', { value: true });
 exports.ProductsControllers = void 0;
 const products_service_1 = require('./products.service');
-const productValidation_1 = require('./productValidation');
+const product_validation_1 = require('./product.validation');
 const zod_1 = require('zod');
 const createProduct = (req, res) =>
   __awaiter(void 0, void 0, void 0, function* () {
@@ -43,7 +43,7 @@ const createProduct = (req, res) =>
       const product = req.body;
       //validation create product
       const parsedProduct =
-        productValidation_1.productValidationSchema.parse(product);
+        product_validation_1.productValidationSchema.parse(product);
       const result =
         yield products_service_1.ProductsServices.createProductsIntoDB(
           parsedProduct

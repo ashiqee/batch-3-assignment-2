@@ -1,9 +1,6 @@
-
-
-
-export type TOders= {
-    email: string;
-    productId: string;
-    quantity: number;
-    price: number;
-    }
+export interface TOders {
+  email: string;
+  productId: string;
+  quantity: number;
+  price: number;
+}
