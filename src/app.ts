@@ -4,6 +4,7 @@ import cors from 'cors'
 import { ProductsRoutes } from './app/modules/products/products.route';
 import { OrdersRoutes } from './app/modules/orders/orders.route';
 import { number } from 'zod';
+import CustomError from './errors/CustomeErrors';
 
 
 const app: Application = express();
@@ -28,15 +29,13 @@ app.get('/', (req:Request, res:Response) => {
 })
 
 app.all("*",(req:Request,res:Response,next:NextFunction)=>{
-const error = new Error(`Route not found`);
-error.status = 404;
-  next(error)
+next(new CustomError('Route not found',404));
 });
 
-app.use((err:any, req:Request, res:Response, next:NextFunction) => {
+app.use((err:CustomError, req:Request, res:Response, next:NextFunction) => {
   res.status(err.status || 500).json({
     success:false,
-    message: err.message,
+    message: err.message || "Internal Server Error",
   });
 });
 
