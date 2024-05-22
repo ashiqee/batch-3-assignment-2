@@ -54,9 +54,7 @@ const parsedProduct = productValidationSchema.parse(updateProductData.data)
    
     return result;
   } catch (err:any) {
-   console.log(err.errors);
-   
-    if(err instanceof z.ZodError){
+      if(err instanceof z.ZodError){
       throw err;
     }else{
       throw new Error(err.message);
