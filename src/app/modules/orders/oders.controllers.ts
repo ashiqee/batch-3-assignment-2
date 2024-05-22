@@ -8,7 +8,9 @@ import { z } from "zod";
 const createNewOrder = async (req: Request, res: Response) => {
     try {
         const order = req.body; 
-        const {productId ,quantity}=order;
+        //    order validation 
+        const parseOrderValid = orderValidationSchema.parse(order)
+        const {productId ,quantity}=parseOrderValid;
         
         const productInventoryUpdate = await ProductsServices.orderInventoryUpdateInDB(productId as string, quantity as number)
 
@@ -19,8 +21,7 @@ if(!productInventoryUpdate){
         message: "Insufficient quantity available in inventory",
            })}
 
-        //    order validation 
-        const parseOrderValid = orderValidationSchema.parse(order)
+        
 
         const result = await OrdersServices.createNewOrderInDB(parseOrderValid);
         res.status(200).json({
