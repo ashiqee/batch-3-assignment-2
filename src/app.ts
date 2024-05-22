@@ -25,7 +25,7 @@ app.use("/api/orders", OrdersRoutes)
 
 
 app.get('/', (req:Request, res:Response) => {
-  res.send('Ecommerce API')
+  res.send('Welcome product management api server!')
 })
 
 app.all("*",(req:Request,res:Response,next:NextFunction)=>{

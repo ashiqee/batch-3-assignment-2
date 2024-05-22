@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const products_route_1 = require("./app/modules/products/products.route");
 const orders_route_1 = require("./app/modules/orders/orders.route");
+const CustomeErrors_1 = __importDefault(require("./errors/CustomeErrors"));
 const app = (0, express_1.default)();
 //parsers
 app.use(express_1.default.json());
@@ -15,17 +16,15 @@ app.use((0, cors_1.default)());
 app.use("/api/products", products_route_1.ProductsRoutes);
 app.use("/api/orders", orders_route_1.OrdersRoutes);
 app.get('/', (req, res) => {
-    res.send('Ecommerce API');
+    res.send('Welcome product management api server!');
 });
 app.all("*", (req, res, next) => {
-    const error = new Error(`Route not found`);
-    error.status = 404;
-    next(error);
+    next(new CustomeErrors_1.default('Route not found', 404));
 });
 app.use((err, req, res, next) => {
     res.status(err.status || 500).json({
         success: false,
-        message: err.message,
+        message: err.message || "Internal Server Error",
     });
 });
 exports.default = app;

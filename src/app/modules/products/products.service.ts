@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { productValidationSchema } from "./productValidation";
+import { productValidationSchema } from "./product.validation";
 import { Products } from "./products.interface";
 import { ProductsModel } from "./products.model";
 

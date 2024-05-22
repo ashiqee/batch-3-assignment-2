@@ -20,7 +20,7 @@ function main() {
         try {
             yield mongoose_1.default.connect(config_1.default.database_url);
             app_1.default.listen(config_1.default.port, () => {
-                console.log(`Ecommerce-DB Sever running on port ${config_1.default.port}`);
+                console.log(`Product Management sever running on port ${config_1.default.port}`);
             });
         }
         catch (error) {

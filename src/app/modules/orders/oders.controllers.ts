@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { OrdersServices } from './orders.service';
 import { ProductsServices } from "../products/products.service";
-import { orderValidationSchema } from "./orderValidation";
+import { orderValidationSchema } from "./order.validation";
 import { z } from "zod";
 
 const createNewOrder = async (req: Request, res: Response) => {
