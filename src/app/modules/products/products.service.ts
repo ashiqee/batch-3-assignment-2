@@ -1,3 +1,5 @@
+import { z } from "zod";
+import { productValidationSchema } from "./productValidation";
 import { Products } from "./products.interface";
 import { ProductsModel } from "./products.model";
 
@@ -38,9 +40,12 @@ const updateAProductIntoDB = async (updateProductData: {
   data: Partial<Products>;
 }) => {
   try {
+       //validation update product
+const parsedProduct = productValidationSchema.parse(updateProductData.data)
+
     const result = await ProductsModel.findByIdAndUpdate(
       { _id: updateProductData._id },
-      updateProductData.data,
+      parsedProduct,
       {
         new: true,
         runValidators: true,
@@ -48,8 +53,15 @@ const updateAProductIntoDB = async (updateProductData: {
     );
    
     return result;
-  } catch (err) {
-    console.log(err);
+  } catch (err:any) {
+   console.log(err.errors);
+   
+    if(err instanceof z.ZodError){
+      throw err;
+    }else{
+      throw new Error(err.message);
+    }
+    
   }
 };
 

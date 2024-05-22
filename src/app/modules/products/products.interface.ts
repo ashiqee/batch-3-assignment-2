@@ -14,6 +14,6 @@ export type Products = {
   price: number;
   category: string;
   tags: string[];
-  variants: [Variant];
+  variants: Variant[];
   inventory: Inventory;
 };

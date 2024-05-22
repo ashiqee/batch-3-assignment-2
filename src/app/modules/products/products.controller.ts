@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
 import { ProductsServices } from "./products.service";
+import { productValidationSchema } from "./productValidation";
+import { z } from "zod";
 
 const createProduct = async (req: Request, res: Response) => {
   try {
     const product = req.body;
-    console.log(product);
-    const result = await ProductsServices.createProductsIntoDB(product);
+    
+    //validation create product
+const parsedProduct = productValidationSchema.parse(product)
+
+    const result = await ProductsServices.createProductsIntoDB(parsedProduct);
 
     res.status(200).json({
       success: true,
@@ -87,6 +92,7 @@ const updateAProduct = async (req: Request, res: Response) => {
       _id: productId,
       data: product,
     };
+    
 
     const result = await ProductsServices.updateAProductIntoDB(
       updateProductData
@@ -96,6 +102,7 @@ const updateAProduct = async (req: Request, res: Response) => {
       return res.status(404).json({
         success: false,
         message: "Product not found",
+        
       });
     }
 
@@ -105,11 +112,24 @@ const updateAProduct = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to Product updated!",
-      data: err.message,
+   if(err instanceof z.ZodError){
+   
+    const errorMsg = err.errors.map((error)=>({
+      path: error.path.join('.'),
+      errorMessage: error.message,
+    }))
+   
+    return res.status(400).json({
+      success:false,
+      message:"Validation error",
+      errors: errorMsg,
     });
+   }else{
+    return res.status(500).json({
+      success:false,
+      message: err.message,
+    })
+   }
   }
 };
 
